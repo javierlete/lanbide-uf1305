@@ -11,13 +11,20 @@ public class Persona {
 	private String nombre;
 	private String apellido;
 	private LocalDate fechaNacimiento;
+	
+	private Dni dni;
 
 	// Constructores
-	public Persona(Long id, String nombre, String apellido, LocalDate fechaNacimiento) {
+	public Persona(Long id, String nombre, String apellido, LocalDate fechaNacimiento, Dni dni) {
 		setId(id);
 		setNombre(nombre);
 		setApellido(apellido);
 		setFechaNacimiento(fechaNacimiento);
+		setDni(dni);
+	}
+
+	public Persona(Long id, String nombre, String apellido, LocalDate fechaNacimiento) {
+		this(id, nombre, apellido, fechaNacimiento, null);
 	}
 
 	public Persona(Long id, String nombre, String apellido) {
@@ -82,6 +89,14 @@ public class Persona {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
+	public Dni getDni() {
+		return dni;
+	}
+
+	public void setDni(Dni dni) {
+		this.dni = dni;
+	}
+
 	// Métodos de instancia
 	public String getNombreCompleto() {
 		return nombre + " " + apellido;
@@ -118,5 +133,11 @@ public class Persona {
 
 	public static Persona getMayor(Persona p1, Persona p2) {
 		return isMayorQue(p1, p2) ? p1 : p2;
+	}
+
+	@Override
+	public String toString() {
+		return "Persona [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", fechaNacimiento="
+				+ fechaNacimiento + ", dni=" + dni + "]";
 	}
 }
