@@ -2,6 +2,7 @@ package com.ipartek.formacion.uf1305.poo;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Objects;
 
 // Clase (como un molde)
 public class Persona {
@@ -28,24 +29,24 @@ public class Persona {
 	}
 
 	public Persona(Long id, String nombre, String apellido) {
-		this(id, nombre, apellido, null);
+		this(id, nombre, apellido, null, null);
 	}
 
 	public Persona(String nombre, String apellido) {
-		this(null, nombre, apellido, null);
+		this(null, nombre, apellido, null, null);
 	}
 
 	public Persona(String nombre) {
-		this(null, nombre, null, null);
+		this(null, nombre, null, null, null);
 	}
 
 	// Constructor de copia
 	public Persona(Persona persona) {
-		this(persona.getId(), persona.getNombre(), persona.getApellido(), persona.getFechaNacimiento());
+		this(persona.getId(), persona.getNombre(), persona.getApellido(), persona.getFechaNacimiento(), persona.getDni());
 	}
 
 	public Persona() {
-		this(null, NOMBRE_VACIO, null, null);
+		this(null, NOMBRE_VACIO, null, null, null);
 	}
 
 	// Getters y setters
@@ -133,6 +134,27 @@ public class Persona {
 
 	public static Persona getMayor(Persona p1, Persona p2) {
 		return isMayorQue(p1, p2) ? p1 : p2;
+	}
+
+	
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(apellido, dni, fechaNacimiento, id, nombre);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Persona other = (Persona) obj;
+		return Objects.equals(apellido, other.apellido) && Objects.equals(dni, other.dni)
+				&& Objects.equals(fechaNacimiento, other.fechaNacimiento) && Objects.equals(id, other.id)
+				&& Objects.equals(nombre, other.nombre);
 	}
 
 	@Override

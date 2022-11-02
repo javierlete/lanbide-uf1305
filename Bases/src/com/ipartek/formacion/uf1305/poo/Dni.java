@@ -1,8 +1,10 @@
 package com.ipartek.formacion.uf1305.poo;
 
+import java.util.Objects;
+
 public class Dni {
-	private static final String REGEX_DNI = "[\\dXYZ]\\d{7}[A-Z]";
 	private static final String LETRAS_DNI = "TRWAGMYFPDXBNJZSQVHLCKE";
+	private static final String REGEX_DNI = "^[\\dXYZ]\\d{7}[" + LETRAS_DNI + "]$";
 
 	private String numeroYLetraValido;
 
@@ -53,16 +55,33 @@ public class Dni {
 
 		String numeroSinLetraDelFinal = numeroYLetraAValidar.substring(0, 8); // 12345678 o X234567
 		String numeroSoloConDigitos = numeroSinLetraDelFinal.replace('X', '0').replace('Y', '1').replace('Z', '2'); // 12345678
-
 		int numero = Integer.parseInt(numeroSoloConDigitos);
+		
 		char letra = numeroYLetraAValidar.charAt(8);
+		
 		int restoDeLaDivisionEntera = numero % 23;
-
 		char letraCorrecta = LETRAS_DNI.charAt(restoDeLaDivisionEntera);
 
 		boolean dniCorrecto = letra == letraCorrecta;
 
 		return dniCorrecto;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(numeroYLetraValido);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Dni other = (Dni) obj;
+		return Objects.equals(numeroYLetraValido, other.numeroYLetraValido);
 	}
 
 	@Override
