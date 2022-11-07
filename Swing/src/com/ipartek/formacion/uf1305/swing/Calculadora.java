@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -49,65 +50,83 @@ public class Calculadora {
 
 		for (String etiqueta : etiquetas) {
 			btn = new JButton(etiqueta);
-			btn.addActionListener(e -> {
-				JButton botonPulsado = (JButton) e.getSource();
-				String etiquetaBotonPulsado = botonPulsado.getText();
-				String textoDisplay = tfDisplay.getText();
-
-				if (etiquetaBotonPulsado.matches("[\\d]")) {
-					textoDisplay += etiquetaBotonPulsado;
-				} else {
-					switch (etiquetaBotonPulsado) {
-					case "AC":
-						textoDisplay = "";
-						break;
-					case "+/-":
-						textoDisplay = String.valueOf(Double.parseDouble(textoDisplay) * -1);
-						break;
-					case "%":
-						textoDisplay = String.valueOf(Double.parseDouble(textoDisplay) * .01);
-						break;
-					case ",":
-						if (textoDisplay.indexOf('.') != -1) {
-							System.out.println("Hay coma previa");
-							return;
-						} else {
-							System.out.println("No hay coma previa");
-							etiquetaBotonPulsado = ".";
-							textoDisplay += etiquetaBotonPulsado;
-						}
-						break;
-					case "=":
-						op2 = Double.parseDouble(textoDisplay);
-
-						switch (operador) {
-						case "+":
-							resultado = op1 + op2;
-							break;
-						case "-":
-							resultado = op1 - op2;
-							break;
-						case "x":
-							resultado = op1 * op2;
-							break;
-						case "/":
-							resultado = op1 / op2;
-							break;
-						}
-						
-						textoDisplay = String.valueOf(resultado);
-
-						break;
-					default: // % + - * /
-						op1 = Double.parseDouble(textoDisplay);
-						operador = etiquetaBotonPulsado;
-						textoDisplay = "";
-					}
-				}
-				tfDisplay.setText(textoDisplay);
-			});
+			btn.addActionListener(e -> botonPulsado(e));
 			pBotonera.add(btn);
 		}
+	}
+	
+	private void botonPulsado(ActionEvent e) {
+		JButton botonPulsado = (JButton) e.getSource();
+		String etiquetaBotonPulsado = botonPulsado.getText();
+		String textoDisplay = tfDisplay.getText();
+
+		if (etiquetaBotonPulsado.matches("[\\d]")) {
+			textoDisplay += etiquetaBotonPulsado;
+		} else {
+			textoDisplay = procesarSimbolo(etiquetaBotonPulsado, textoDisplay);
+		}
+		
+		tfDisplay.setText(textoDisplay);
+	}
+
+	private String procesarSimbolo(String etiquetaBotonPulsado, String textoDisplay) {
+		switch (etiquetaBotonPulsado) {
+		case "AC":
+			textoDisplay = "";
+			break;
+		case "+/-":
+			textoDisplay = String.valueOf(Double.parseDouble(textoDisplay) * -1);
+			break;
+		case "%":
+			textoDisplay = String.valueOf(Double.parseDouble(textoDisplay) * .01);
+			break;
+		case ",":
+			textoDisplay = procesarComa(textoDisplay);
+			break;
+		case "=":
+			textoDisplay = procesarIgual(textoDisplay);
+
+			break;
+		default: // % + - * /
+			op1 = Double.parseDouble(textoDisplay);
+			operador = etiquetaBotonPulsado;
+			textoDisplay = "";
+		}
+		return textoDisplay;
+	}
+
+	private String procesarComa(String textoDisplay) {
+		if (textoDisplay.indexOf('.') != -1) {
+			// System.out.println("Hay coma previa");
+			return textoDisplay;
+		} else {
+			// System.out.println("No hay coma previa");
+			textoDisplay += ".";
+		}
+		
+		return textoDisplay;
+	}
+
+	private String procesarIgual(String textoDisplay) {
+		op2 = Double.parseDouble(textoDisplay);
+
+		switch (operador) {
+		case "+":
+			resultado = op1 + op2;
+			break;
+		case "-":
+			resultado = op1 - op2;
+			break;
+		case "x":
+			resultado = op1 * op2;
+			break;
+		case "/":
+			resultado = op1 / op2;
+			break;
+		}
+		
+		textoDisplay = String.valueOf(resultado);
+		return textoDisplay;
 	}
 
 	/**
