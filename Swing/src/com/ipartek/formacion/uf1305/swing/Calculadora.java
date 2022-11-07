@@ -17,6 +17,9 @@ public class Calculadora {
 	private JTextField tfDisplay;
 	private JPanel pBotonera;
 
+	private double op1, op2, resultado;
+	private String operador;
+
 	/**
 	 * Launch the application.
 	 */
@@ -51,13 +54,54 @@ public class Calculadora {
 				String etiquetaBotonPulsado = botonPulsado.getText();
 				String textoDisplay = tfDisplay.getText();
 
-				if (etiquetaBotonPulsado.matches("\\d")) {
+				if (etiquetaBotonPulsado.matches("[\\d]")) {
 					textoDisplay += etiquetaBotonPulsado;
 				} else {
-					switch(etiquetaBotonPulsado) {
+					switch (etiquetaBotonPulsado) {
 					case "AC":
 						textoDisplay = "";
 						break;
+					case "+/-":
+						textoDisplay = String.valueOf(Double.parseDouble(textoDisplay) * -1);
+						break;
+					case "%":
+						textoDisplay = String.valueOf(Double.parseDouble(textoDisplay) * .01);
+						break;
+					case ",":
+						if (textoDisplay.indexOf('.') != -1) {
+							System.out.println("Hay coma previa");
+							return;
+						} else {
+							System.out.println("No hay coma previa");
+							etiquetaBotonPulsado = ".";
+							textoDisplay += etiquetaBotonPulsado;
+						}
+						break;
+					case "=":
+						op2 = Double.parseDouble(textoDisplay);
+
+						switch (operador) {
+						case "+":
+							resultado = op1 + op2;
+							break;
+						case "-":
+							resultado = op1 - op2;
+							break;
+						case "x":
+							resultado = op1 * op2;
+							break;
+						case "/":
+							resultado = op1 / op2;
+							break;
+						}
+						
+						textoDisplay = String.valueOf(resultado);
+
+						break;
+					default: // % + - * /
+						op1 = Double.parseDouble(textoDisplay);
+						operador = etiquetaBotonPulsado;
+						textoDisplay = "";
 					}
 				}
 				tfDisplay.setText(textoDisplay);
