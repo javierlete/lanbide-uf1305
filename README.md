@@ -10,6 +10,7 @@ Ejercicios de orientación a objetos: https://puntocomnoesunlenguaje.blogspot.co
 JTable con modelo
 ------------------
 Básico utilizando el DefaultTableModel: http://chuwiki.chuidiang.org/index.php?title=JTable
+
 Creando un modelo propio: https://www.chuidiang.org/java/tablas/tablamodelo/tablamodelo.php
 
 Libros
