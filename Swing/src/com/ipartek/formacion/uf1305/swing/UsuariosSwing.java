@@ -5,7 +5,15 @@ import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -108,6 +116,25 @@ public class UsuariosSwing {
 	}
 
 	private void rellenarTabla() {
+    	final String SQL_SELECT = "SELECT * FROM usuarios";
+    	// final String URL = "jdbc:mysql://localhost:3306/basededatosoesquema";
+        final String URL = "jdbc:sqlite:tienda.db";
+        // final String USER = "root";
+        // final String PASS = "admin";
+        
+        try (Connection con = DriverManager.getConnection(URL);
+				Statement st = con.createStatement();
+				ResultSet rs = st.executeQuery(SQL_SELECT)) {
+			while(rs.next()) {
+				System.out.printf("%s\t%s\t%s\t%s\n", rs.getLong("id"), rs.getString("nombre"), rs.getString("email"), rs.getString("password"));
+				tm.addRow(new Object[] { rs.getLong("id"), rs.getString("nombre"), rs.getString("email") });
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException("Ha fallado el programa", e);
+		}
+	}
+	
+	private void rellenarTablaMemoria() {
 		tm.setRowCount(0);
 		
 		for (Usuario u : usuarios.values()) {
